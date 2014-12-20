@@ -40,17 +40,21 @@ makeCacheMatrix <- function(mat = matrix()) {
 ## In case of an unchanged matrix, the function returns a 
 ## cached value of the inverse instead of calculating it again.
 
-cacheSolve <- function(matlist, ...) {
+cacheSolve <- function(matobj, ...) {
+    # Get matrix inverse from matrix object:
+    inv <- matobj$getinv()
+    
     # Check if matrix inverse has been calculated:
-    inv <- matlist$getinv()
     if (!is.null(inv)) {
         message("Getting cached inverse.")
         return(inv)
     }
     
-    # If not, get matrix data and calculate inverse:
-    data <- matlist$get()
+    # If not, get data from matrix object and calculate inverse:
+    data <- matobj$get()
     inv <- solve(data, ...)
-    matlist$setinv(inv)
+    
+    # Save calculated inverse in matrix object:
+    matobj$setinv(inv)
     inv
 }
